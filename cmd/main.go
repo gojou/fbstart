@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -17,6 +18,11 @@ func main() {
 
 func run() (e error) {
 	fmt.Println("Hello world!")
+	e = initdb()
+	if e != nil {
+		return
+	}
+	e = errors.New("oops i did it again")
 	return // omitting explicit return value; e scoped in function call
 }
 
@@ -37,5 +43,26 @@ func initdb() (e error) {
 		return
 	}
 	defer client.Close()
+
+	_, _, e = client.Collection("users").Add(ctx, map[string]interface{}{
+		"first": "Ada",
+		"last":  "Lovelace",
+		"born":  1815,
+	})
+	if e != nil {
+		log.Fatalf("Failed adding alovelace: %v", err)
+		return
+	}
+
+	_, _, e = client.Collection("users").Add(ctx, map[string]interface{}{
+		"first":  "Alan",
+		"middle": "Mathison",
+		"last":   "Turing",
+		"born":   1912,
+	})
+	if e != nil {
+		log.Fatalf("Failed adding aturing: %v", err)
+		return
+	}
 	return
 }
