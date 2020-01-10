@@ -24,6 +24,7 @@ func initdb() (e error) {
 	// Use the application default credentials
 
 	ctx := context.Background()
+	// test the following to see if the format of the command is correct
 	conf := &firebase.Config{ProjectID: "fbstart"}
 	app, err := firebase.NewApp(ctx, conf)
 	if err != nil {
