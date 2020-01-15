@@ -7,6 +7,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/gojou/fbstart/pkg/entities"
+
 	firebase "firebase.google.com/go"
 )
 
@@ -17,7 +19,8 @@ func main() {
 }
 
 func run() (e error) {
-	fmt.Println("Hello world!")
+	scout := entities.New("Poling", "Aden")
+	fmt.Println("Hello world! " + scout.Greeter())
 	e = initdb()
 	if e != nil {
 		return
@@ -35,11 +38,14 @@ func initdb() (e error) {
 	app, err := firebase.NewApp(ctx, conf)
 	if err != nil {
 		log.Fatalln(err)
+		e = err
+		return
 	}
 
 	client, err := app.Firestore(ctx)
 	if err != nil {
 		log.Fatalln(err)
+		e = err
 		return
 	}
 	defer client.Close()
