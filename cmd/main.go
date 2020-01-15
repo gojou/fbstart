@@ -19,12 +19,10 @@ func main() {
 }
 
 func run() (e error) {
-	parent := new(entities.Contact)
-	parent.LastName = "Poling"
-	parent.FirstName = "Mark"
-	fmt.Println(parent.Greeter())
 	scout := entities.New("Poling", "Aden")
 	fmt.Println("Hello world! " + scout.Greeter())
+
+	// initialize the web server.
 	e = initdb()
 	if e != nil {
 		return

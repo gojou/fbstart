@@ -1,0 +1,39 @@
+/* Tweaking the bootstrap */
+/* Variable Overrides */
+
+body {
+  background: url('/static/images/pines.jpg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
+}
+
+.jumbotron {
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+}
+
+.card {
+  margin-top: 2em;
+}
+
+.card-text {
+  padding-top: 1em;
+  padding-bottom: 1em;
+  /* height: 120px !important;
+  overflow: hidden;
+    background-image: linear-gradient(to bottom, transparent, white); */
+}
+
+.read-more {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  margin-top: 10px;
+  padding: 30px 0;
+  /* "transparent" only works here because == rgba(0,0,0,0) */
+  background-image: linear-gradient(to bottom, transparent, white);
+}
