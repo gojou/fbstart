@@ -9,7 +9,7 @@ import (
 
 	"github.com/gojou/fbstart/pkg/entities"
 
-	firebase "firebase.google.com/go"
+	"cloud.google.com/go/firestore"
 )
 
 func main() {
@@ -37,16 +37,8 @@ func initdb() (e error) {
 	// Use the application default credentials
 
 	ctx := context.Background()
-	// test the following to see if the format of the command is correct
-	conf := &firebase.Config{ProjectID: "fbstart"}
-	app, err := firebase.NewApp(ctx, conf)
-	if err != nil {
-		log.Fatalln(err)
-		e = err
-		return
-	}
 
-	client, err := app.Firestore(ctx)
+	client, err := firestore.NewClient(ctx, "fbstart")
 	if err != nil {
 		log.Fatalln(err)
 		e = err
