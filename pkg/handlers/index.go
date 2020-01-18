@@ -7,13 +7,13 @@ import (
 
 // TemplateParams is TemplateParams
 type TemplateParams struct {
-	Notice    string
-	ID        int
-	FirstName string
-	LastName  string
-	EmailAddr string
-	Phone     string
-	Message   string
+	// Notice    string
+	// ID        int
+	// FirstName string
+	// LastName  string
+	// EmailAddr string
+	// Phone     string
+	// Message   string
 }
 
 // Index is index.

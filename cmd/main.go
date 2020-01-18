@@ -25,7 +25,7 @@ func run() (e error) {
 	fmt.Println("Hello world! " + scout.Greeter())
 
 	// initialize the web server
-	w = initweb()
+	e = initweb()
 	if e != nil {
 		return
 	}
