@@ -2,11 +2,11 @@ package main
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gojou/fbstart/pkg/entities"
 	"github.com/gojou/fbstart/pkg/handlers"
@@ -21,22 +21,22 @@ func main() {
 }
 
 func run() (e error) {
-	scout := entities.New("Poling", "Aden")
+	scout := entities.New("Poling", "Aden", time.Date(2007, time.May, 23, 0, 0, 0, 0, time.UTC))
 	fmt.Println("Hello world! " + scout.Greeter())
+	// omitting explicit return value; e scoped in function call
+	// initialize storage, in this case firestore
+	e = initdb()
+	if e != nil {
+		return
+	}
 
 	// initialize the web server
 	e = initweb()
 	if e != nil {
 		return
 	}
-
-	// initialize storage, in this case firestore
-	e = initdb()
-	if e != nil {
-		return
-	}
-	e = errors.New("oops i did it again")
-	return // omitting explicit return value; e scoped in function call
+	// e = nil
+	return
 }
 
 func initweb() (e error) {
