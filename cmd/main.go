@@ -66,7 +66,17 @@ func initdb() (e error) {
 	}
 	defer client.Close()
 
-	_, _, e = client.Collection("users").Add(ctx, map[string]interface{}{
+e = useDB(&client)
+	if e != nil {
+		log.Fatalf("Failed: %v", err)
+		return
+	}
+	return
+}
+
+func useDB(db *firestore.client) (e error) {
+
+	_, _, e = db.Collection("users").Add(ctx, map[string]interface{}{
 		"first": "Ada",
 		"last":  "Lovelace",
 		"born":  1815,
@@ -76,7 +86,7 @@ func initdb() (e error) {
 		return
 	}
 
-	_, _, e = client.Collection("users").Add(ctx, map[string]interface{}{
+	_, _, e = db.Collection("users").Add(ctx, map[string]interface{})
 		"first":  "Alan",
 		"middle": "Mathison",
 		"last":   "Turing",
@@ -87,4 +97,5 @@ func initdb() (e error) {
 		return
 	}
 	return
+
 }
