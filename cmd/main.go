@@ -21,11 +21,12 @@ func main() {
 }
 
 func run() (e error) {
+	var client *firestore.Client
 	scout := entities.New("Poling", "Aden", time.Date(2007, time.May, 23, 0, 0, 0, 0, time.UTC))
 	fmt.Println("Hello world! " + scout.Greeter())
 	// omitting explicit return value; e scoped in function call
 	// initialize storage, in this case firestore
-	e = initdb()
+	client, e = initdb()
 	if e != nil {
 		return
 	}
@@ -53,38 +54,37 @@ func initweb() (e error) {
 	return nil
 }
 
-func initdb() (e error) {
+func initdb() (*firestore.Client, error) {
 	// Use the application default credentials
 
 	ctx := context.Background()
 
-	client, err := firestore.NewClient(ctx, "fbstart")
+	*client, err := firestore.NewClient(ctx, "fbstart")
 	if err != nil {
 		log.Fatalln(err)
-		e = err
-		return
-	}
-	defer client.Close()
-
-	_, _, e = client.Collection("users").Add(ctx, map[string]interface{}{
-		"first": "Ada",
-		"last":  "Lovelace",
-		"born":  1815,
-	})
-	if e != nil {
-		log.Fatalf("Failed adding alovelace: %v", err)
-		return
+		return nil, err
 	}
 
-	_, _, e = client.Collection("users").Add(ctx, map[string]interface{}{
-		"first":  "Alan",
-		"middle": "Mathison",
-		"last":   "Turing",
-		"born":   1912,
-	})
-	if e != nil {
-		log.Fatalf("Failed adding aturing: %v", err)
-		return
-	}
-	return
+	// _, _, e = client.Collection("users").Add(ctx, map[string]interface{}{
+	// 	"first": "Ada",
+	// 	"last":  "Lovelace",
+	// 	"born":  1815,
+	// })
+	// if e != nil {
+	// 	log.Fatalf("Failed adding alovelace: %v", err)
+	// 	return
+	// }
+	//
+	// _, _, e = client.Collection("users").Add(ctx, map[string]interface{}{
+	// 	"first":  "Alan",
+	// 	"middle": "Mathison",
+	// 	"last":   "Turing",
+	// 	"born":   1912,
+	// })
+	// if e != nil {
+	// 	log.Fatalf("Failed adding aturing: %v", err)
+	// 	return
+	// }
+
+	return &client, nil
 }
