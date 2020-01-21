@@ -66,7 +66,7 @@ func initdb() (e error) {
 	}
 	defer client.Close()
 
-e = useDB(ctx, *client)
+	e = useDB(ctx, *client)
 	if e != nil {
 		log.Fatalf("Failed: %v", err)
 		return
