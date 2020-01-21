@@ -21,12 +21,12 @@ func main() {
 }
 
 func run() (e error) {
-	var client *firestore.Client
+	// var client *firestore.Client
 	scout := entities.New("Poling", "Aden", time.Date(2007, time.May, 23, 0, 0, 0, 0, time.UTC))
 	fmt.Println("Hello world! " + scout.Greeter())
 	// omitting explicit return value; e scoped in function call
 	// initialize storage, in this case firestore
-	client, e = initdb()
+	e = initdb()
 	if e != nil {
 		return
 	}
@@ -54,37 +54,47 @@ func initweb() (e error) {
 	return nil
 }
 
-func initdb() (*firestore.Client, error) {
+func initdb() (e error) {
 	// Use the application default credentials
 
 	ctx := context.Background()
 
-	*client, err := firestore.NewClient(ctx, "fbstart")
-	if err != nil {
-		log.Fatalln(err)
-		return nil, err
+	client, e := firestore.NewClient(ctx, "fbstart")
+	if e != nil {
+		log.Fatalln(e)
+		return e
 	}
 
-	// _, _, e = client.Collection("users").Add(ctx, map[string]interface{}{
-	// 	"first": "Ada",
-	// 	"last":  "Lovelace",
-	// 	"born":  1815,
-	// })
-	// if e != nil {
-	// 	log.Fatalf("Failed adding alovelace: %v", err)
-	// 	return
-	// }
-	//
-	// _, _, e = client.Collection("users").Add(ctx, map[string]interface{}{
-	// 	"first":  "Alan",
-	// 	"middle": "Mathison",
-	// 	"last":   "Turing",
-	// 	"born":   1912,
-	// })
-	// if e != nil {
-	// 	log.Fatalf("Failed adding aturing: %v", err)
-	// 	return
-	// }
+	e = useDB(ctx, *client)
+	if e != nil {
+		log.Fatalf("Failed: %v", e)
+		return
+	}
+	return
+}
 
-	return &client, nil
+func useDB(ctx context.Context, db firestore.Client) (err error) {
+
+	_, _, err = db.Collection("users").Add(ctx, map[string]interface{}{
+		"first": "Ada",
+		"last":  "Lovelace",
+		"born":  1815,
+	})
+	if err != nil {
+		log.Fatalf("Failed adding alovelace: %v", err)
+		return
+	}
+
+	_, _, err = db.Collection("users").Add(ctx, map[string]interface{}{
+		"first":  "Alan",
+		"middle": "Mathison",
+		"last":   "Turing",
+		"born":   1912,
+	})
+	if err != nil {
+		log.Fatalf("Failed adding aturing: %v", err)
+		return
+	}
+	return
+
 }
