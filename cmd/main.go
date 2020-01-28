@@ -84,6 +84,7 @@ func useDB(ctx context.Context, db firestore.Client) (err error) {
 		log.Fatalf("Failed adding alovelace: %v", err)
 		return
 	}
+	log.Println("added Ada")
 
 	_, _, err = db.Collection("users").Add(ctx, map[string]interface{}{
 		"first":  "Alan",
@@ -91,6 +92,7 @@ func useDB(ctx context.Context, db firestore.Client) (err error) {
 		"last":   "Turing",
 		"born":   1912,
 	})
+	log.Println("added Alan")
 	if err != nil {
 		log.Fatalf("Failed adding aturing: %v", err)
 		return
