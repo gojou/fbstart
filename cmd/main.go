@@ -42,7 +42,6 @@ func run() (e error) {
 
 func initweb() (e error) {
 	http.HandleFunc("/", handlers.Index)
-
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
@@ -51,6 +50,7 @@ func initweb() (e error) {
 
 	log.Printf("Listening on port %s", port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), nil))
+
 	return nil
 }
 

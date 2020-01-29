@@ -27,14 +27,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		"static/html/index.html",
 	))
 
-	//Display 404 if it's odball URL
-	if r.URL.Path != "/" {
-		page = template.Must(template.ParseFiles(
-			"static/html/_base.html",
-			"static/html/404.html",
-		))
-
-	}
+	// TODO: Catch bad request methods, write appropriate responses
 
 	if r.Method == "GET" {
 		page.Execute(w, params)
