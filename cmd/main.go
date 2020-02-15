@@ -52,6 +52,7 @@ func initweb() (e error) {
 	log.Printf("Listening on port %s", port)
 
 	router := mux.NewRouter()
+	// THIS IS THE IMPORTANT LINE
 	router.HandleFunc("/", scout.Server)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), router))
 
