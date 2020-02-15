@@ -1,10 +1,16 @@
 package entities
 
-import "time"
+import (
+	"fmt"
+	"net/http"
+	"strconv"
+	"time"
+)
 
 // Contact is the base structure for Scouts, Leaders, and any other individual
 // referenced by this application.
 type Contact struct {
+	ID         string `json:"id"`
 	LastName   string `json:"last_name"`
 	FirstName  string `json:"first_name"`
 	BirthYear  int    `json:"birth_year"`
@@ -17,13 +23,21 @@ func New(last string, first string, birth time.Time) *Contact {
 	birthYear := birth.Year()
 	birthMonth := int(birth.Month())
 	birthDay := birth.Day()
+	id := first + last + padInt(birthDay) + padInt(birthMonth)
 	return &Contact{
+		ID:         id,
 		LastName:   last,
 		FirstName:  first,
 		BirthYear:  birthYear,
 		BirthMonth: birthMonth,
 		BirthDay:   birthDay,
 	}
+}
+
+// Server serves
+func (c Contact) Server(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	fmt.Fprint(w, "<h1>"+c.Greeter()+"</h1>")
 }
 
 // Greeter is a sample method
@@ -37,4 +51,12 @@ func (c Contact) Greeter() (greeting string) {
 func GetAllContacts() []Contact {
 
 	return nil
+}
+
+func padInt(i int) string {
+	s := strconv.Itoa(i)
+	if len(s) < 2 {
+		s = "0" + s
+	}
+	return s
 }

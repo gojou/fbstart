@@ -8,21 +8,24 @@ import (
 	"os"
 	"time"
 
-	"github.com/gojou/fbstart/pkg/entities"
-	"github.com/gojou/fbstart/pkg/handlers"
+	"github.com/gojou/fbstart/pkg/contacts"
+	"github.com/gorilla/mux"
 
 	"cloud.google.com/go/firestore"
 )
 
+var scout = entities.New("Poling", "Aden", time.Date(2007, time.May, 23, 0, 0, 0, 0, time.UTC))
+
 func main() {
+	log.Printf("Let's light this candle")
+
 	if err := run(); err != nil {
 		fmt.Fprintf(os.Stderr, "%s\n", err)
 	}
 }
 
 func run() (e error) {
-	// var client *firestore.Client
-	scout := entities.New("Poling", "Aden", time.Date(2007, time.May, 23, 0, 0, 0, 0, time.UTC))
+
 	fmt.Println("Hello world! " + scout.Greeter())
 	// omitting explicit return value; e scoped in function call
 	// initialize storage, in this case firestore
@@ -41,15 +44,16 @@ func run() (e error) {
 }
 
 func initweb() (e error) {
-	http.HandleFunc("/", handlers.Index)
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 		log.Printf("Defaulting to port %s", port)
 	}
-
 	log.Printf("Listening on port %s", port)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), nil))
+
+	router := mux.NewRouter()
+	router.HandleFunc("/", scout.Server)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), router))
 
 	return nil
 }
@@ -60,6 +64,7 @@ func initdb() (e error) {
 	ctx := context.Background()
 
 	client, e := firestore.NewClient(ctx, "fbstart")
+	defer client.Close()
 	if e != nil {
 		log.Fatalln(e)
 		return e

@@ -27,7 +27,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		"static/html/index.html",
 	))
 
-	// TODO: Catch bad request methods, write appropriate responses
+	// TODO: Catch unsupported request methods, write appropriate responses
 
 	if r.Method == "GET" {
 		page.Execute(w, params)
