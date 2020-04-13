@@ -1,4 +1,4 @@
-package entities
+package things
 
 import (
 	"fmt"
@@ -7,8 +7,7 @@ import (
 	"time"
 )
 
-// Contact is the base structure for Scouts, Leaders, and any other individual
-// referenced by this application.
+// Contact is the base structure for Scouts, Leaders, and any other individuals referenced by this application.
 type Contact struct {
 	ID         string `json:"id"`
 	LastName   string `json:"last_name"`
@@ -18,8 +17,8 @@ type Contact struct {
 	BirthDay   int    `json:"birth_day"`
 }
 
-//New returns a pointer to a new Contact
-func New(last string, first string, birth time.Time) *Contact {
+//NewContact returns a pointer to a new Contact
+func NewContact(last string, first string, birth time.Time) *Contact {
 	birthYear := birth.Year()
 	birthMonth := int(birth.Month())
 	birthDay := birth.Day()
@@ -43,6 +42,7 @@ func (c Contact) Server(w http.ResponseWriter, r *http.Request) {
 // Greeter is a sample method
 func (c Contact) Greeter() (greeting string) {
 	greeting = "My name is " + c.FirstName + " " + c.LastName
+	greeting = greeting + " " + c.ID
 	return
 }
 
@@ -53,6 +53,8 @@ func GetAllContacts() []Contact {
 	return nil
 }
 
+// padInt utility function adds leading zeros to string representations of
+// months and days <10 characters long.
 func padInt(i int) string {
 	s := strconv.Itoa(i)
 	if len(s) < 2 {

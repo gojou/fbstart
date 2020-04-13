@@ -8,13 +8,14 @@ import (
 	"os"
 	"time"
 
-	"github.com/gojou/fbstart/pkg/contacts"
+	"github.com/gojou/fbstart/pkg/things"
+
 	"github.com/gorilla/mux"
 
 	"cloud.google.com/go/firestore"
 )
 
-var scout = entities.New("Poling", "Aden", time.Date(2007, time.May, 23, 0, 0, 0, 0, time.UTC))
+var scout = things.NewContact("Poling", "Mark", time.Date(1963, time.November, 29, 0, 0, 0, 0, time.UTC))
 
 func main() {
 	log.Printf("Let's light this candle")
@@ -26,21 +27,21 @@ func main() {
 
 func run() (e error) {
 
-	fmt.Println("Hello world! " + scout.Greeter())
-	// omitting explicit return value; e scoped in function call
+	// omitting explicit return value; e scoped in function return
 	// initialize storage, in this case firestore
+
 	e = initdb()
 	if e != nil {
-		return
+		return e
 	}
 
 	// initialize the web server
 	e = initweb()
 	if e != nil {
-		return
+		return e
 	}
 	// e = nil
-	return
+	return e
 }
 
 func initweb() (e error) {
@@ -50,6 +51,7 @@ func initweb() (e error) {
 		log.Printf("Defaulting to port %s", port)
 	}
 	log.Printf("Listening on port %s", port)
+	scout := things.NewContact("Poling", "Mark", time.Date(1963, time.November, 29, 0, 0, 0, 0, time.UTC))
 
 	router := mux.NewRouter()
 	// THIS IS THE IMPORTANT LINE
