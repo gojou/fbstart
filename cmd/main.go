@@ -15,9 +15,6 @@ import (
 	"cloud.google.com/go/firestore"
 )
 
-var scout = contacts.NewContact("Poling", "Mark",
-	time.Date(1963, time.November, 29, 0, 0, 0, 0, time.UTC))
-
 func main() {
 	log.Printf("Let's light this candle")
 
@@ -79,31 +76,31 @@ func initdb() (e error) {
 		log.Fatalf("Failed: %v", e)
 		return e
 	}
-	return nil
+	return e // nil
 }
 
-func useDB(ctx context.Context, db firestore.Client) (err error) {
+func useDB(ctx context.Context, db firestore.Client) (e error) {
 
-	_, _, err = db.Collection("users").Add(ctx, map[string]interface{}{
+	_, _, e = db.Collection("users").Add(ctx, map[string]interface{}{
 		"first": "Ada",
 		"last":  "Lovelace",
 		"born":  1815,
 	})
-	if err != nil {
-		log.Fatalf("Failed adding alovelace: %v", err)
+	if e != nil {
+		log.Fatalf("Failed adding alovelace: %v", e)
 		return
 	}
 	log.Println("added Ada")
 
-	_, _, err = db.Collection("users").Add(ctx, map[string]interface{}{
+	_, _, e = db.Collection("users").Add(ctx, map[string]interface{}{
 		"first":  "Alan",
 		"middle": "Mathison",
 		"last":   "Turing",
 		"born":   1912,
 	})
 	log.Println("added Alan")
-	if err != nil {
-		log.Fatalf("Failed adding aturing: %v", err)
+	if e != nil {
+		log.Fatalf("Failed adding aturing: %v", e)
 		return
 	}
 	return
