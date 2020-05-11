@@ -15,7 +15,8 @@ import (
 	"cloud.google.com/go/firestore"
 )
 
-var scout = things.NewContact("Poling", "Mark", time.Date(1963, time.November, 29, 0, 0, 0, 0, time.UTC))
+var scout = things.NewContact("Poling", "Mark",
+	time.Date(1963, time.November, 29, 0, 0, 0, 0, time.UTC))
 
 func main() {
 	log.Printf("Let's light this candle")
@@ -67,7 +68,7 @@ func initdb() (e error) {
 	ctx := context.Background()
 
 	client, e := firestore.NewClient(ctx, "fbstart")
-	defer client.Close()
+	//	defer client.Close()
 	if e != nil {
 		log.Fatalln(e)
 		return e
@@ -76,9 +77,9 @@ func initdb() (e error) {
 	e = useDB(ctx, *client)
 	if e != nil {
 		log.Fatalf("Failed: %v", e)
-		return
+		return e
 	}
-	return
+	return nil
 }
 
 func useDB(ctx context.Context, db firestore.Client) (err error) {

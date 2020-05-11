@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"strconv"
 	"time"
+
+	"cloud.google.com/go/firestore"
 )
 
 // Contact is the base structure for Scouts, Leaders, and any other individuals referenced by this application.
@@ -15,6 +17,7 @@ type Contact struct {
 	BirthYear  int    `json:"birth_year"`
 	BirthMonth int    `json:"birth_month"`
 	BirthDay   int    `json:"birth_day"`
+	Email      string `json:"email"`
 }
 
 //NewContact returns a pointer to a new Contact
@@ -50,6 +53,12 @@ func (c Contact) Greeter() (greeting string) {
 // TODO: make the return slice a slice of pointers to contacts
 func GetAllContacts() []Contact {
 
+	return nil
+}
+
+// SaveContact will save the contact created in the main func
+// TODO Pull in all the junk to make this work.
+func SaveContact(c *Contact, store firestore.Client) (e error) {
 	return nil
 }
 
