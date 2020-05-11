@@ -8,14 +8,14 @@ import (
 	"os"
 	"time"
 
-	"github.com/gojou/fbstart/pkg/things"
+	"github.com/gojou/fbstart/pkg/things/contacts"
 
 	"github.com/gorilla/mux"
 
 	"cloud.google.com/go/firestore"
 )
 
-var scout = things.NewContact("Poling", "Mark",
+var scout = contacts.NewContact("Poling", "Mark",
 	time.Date(1963, time.November, 29, 0, 0, 0, 0, time.UTC))
 
 func main() {
@@ -52,7 +52,7 @@ func initweb() (e error) {
 		log.Printf("Defaulting to port %s", port)
 	}
 	log.Printf("Listening on port %s", port)
-	scout := things.NewContact("Poling", "Mark", time.Date(1963, time.November, 29, 0, 0, 0, 0, time.UTC))
+	scout := contacts.NewContact("Poling", "Mark", time.Date(1963, time.November, 29, 0, 0, 0, 0, time.UTC))
 
 	router := mux.NewRouter()
 	// THIS IS THE IMPORTANT LINE
