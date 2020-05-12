@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"time"
 
 	"cloud.google.com/go/firestore"
 )
@@ -12,13 +11,13 @@ import (
 // Service returns the Client service
 type Service interface {
 	Create(Contact) error
-	Read(string) (Contact, error)
+	Read(string) (*Contact, error)
 }
 
 // Repository interface defines the methods that can be used on the Service
 type Repository interface {
 	Create(Contact) error
-	Read(string) (Contact, error)
+	Read(string) (*Contact, error)
 }
 
 type service struct {
@@ -33,26 +32,25 @@ func NewService() Service {
 
 }
 
-func (s service) Create(c Contact) error {
-	return s.r.Create(c)
+func (S service) Create(c Contact) error {
+	return S.r.Create(c)
 }
-func (s service) Read(cid string) (Contact, error) {
-	return s.r.Read(cid)
+func (S service) Read(cID string) (*Contact, error) {
+	return S.r.Read(cID)
 }
 
 //NewContact returns a pointer to a new Contact
-func NewContact(last string, first string, birth time.Time) *Contact {
-	birthYear := birth.Year()
-	birthMonth := int(birth.Month())
-	birthDay := birth.Day()
-	id := first + last + padInt(birthDay) + padInt(birthMonth)
+func NewContact(id string, last string,
+	first string, birthyear int, birthmonth int, birthday int,
+	email string) *Contact {
 	return &Contact{
 		ID:         id,
 		LastName:   last,
 		FirstName:  first,
-		BirthYear:  birthYear,
-		BirthMonth: birthMonth,
-		BirthDay:   birthDay,
+		BirthYear:  birthyear,
+		BirthMonth: birthmonth,
+		BirthDay:   birthday,
+		Email:      email,
 	}
 }
 

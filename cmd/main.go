@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"time"
 
 	"github.com/gojou/fbstart/pkg/things/contacts"
 
@@ -49,7 +48,8 @@ func initweb() (e error) {
 		log.Printf("Defaulting to port %s", port)
 	}
 	log.Printf("Listening on port %s", port)
-	scout := contacts.NewContact("Poling", "Mark", time.Date(1963, time.November, 29, 0, 0, 0, 0, time.UTC))
+
+	scout := contacts.NewContact("PolingM", "Poling", "Mark", 1963, 11, 29, "mark@poling.com")
 
 	router := mux.NewRouter()
 	// THIS IS THE IMPORTANT LINE
@@ -65,7 +65,7 @@ func initdb() (e error) {
 	ctx := context.Background()
 
 	client, e := firestore.NewClient(ctx, "fbstart")
-	//	defer client.Close()
+	defer client.Close()
 	if e != nil {
 		log.Fatalln(e)
 		return e
@@ -81,28 +81,62 @@ func initdb() (e error) {
 
 func useDB(ctx context.Context, db firestore.Client) (e error) {
 
-	_, _, e = db.Collection("users").Add(ctx, map[string]interface{}{
-		"first": "Ada",
-		"last":  "Lovelace",
-		"born":  1815,
-	})
-	if e != nil {
-		log.Fatalf("Failed adding alovelace: %v", e)
-		return
+	type User struct {
+		First  string `firestore:"first"`
+		Middle string `firestore:"middle"`
+		Last   string `firestore:"last"`
+		Born   int64  `firestore:"born"`
 	}
-	log.Println("added Ada")
-
-	_, _, e = db.Collection("users").Add(ctx, map[string]interface{}{
-		"first":  "Alan",
-		"middle": "Mathison",
-		"last":   "Turing",
-		"born":   1912,
-	})
-	log.Println("added Alan")
-	if e != nil {
-		log.Fatalf("Failed adding aturing: %v", e)
-		return
+	ada := User{
+		First:  "Ada",
+		Middle: "Rhiannon",
+		Last:   "Lovelace",
+		Born:   1815,
 	}
-	return
 
+	alan := User{
+		First:  "Alan",
+		Middle: "Mathis",
+		Last:   "Turing",
+		Born:   1912,
+	}
+	users := []User{ada, alan}
+	for _, u := range users {
+		_, _, err := db.Collection("users").Add(ctx, u)
+		// _, e = db.Collection("users").Doc(ada.First).Set(ctx, ada)
+		if err != nil {
+			log.Fatalf("Failed adding %v: %v", u.First, err)
+
+		}
+
+	}
+
+	// _, err := db.Collection("users").Doc("one").Set(ctx, ada)
+	// if err != nil {
+	// 	log.Fatalf("Failed adding alovelace: %v", err)
+	// 	return
+	// }
+	// log.Println("added Ada")
+
+	// _, _, e = db.Collection("users").Add(ctx, map[string]interface{}{
+	// 	"first": "Ada",
+	// 	"last":  "Lovelace",
+	// 	"born":  1815,
+	// })
+	// if e != nil {
+	// 	log.Fatalf("Failed adding alovelace: %v", e)
+	// 	return
+	// }
+	// log.Println("added Ada")
+
+	//	_, e = db.Collection("users").Doc(alan.First).Set(ctx, alan)
+	// _, _, e := db.Collection("users").Add(ctx, ada)
+	//
+	// log.Println("added Alan")
+	// if e != nil {
+	// 	log.Fatalf("Failed adding aturing: %v", e)
+	// 	return
+	// }
+	// return
+	return e
 }

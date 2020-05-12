@@ -9,32 +9,39 @@ import (
 
 // Storage holds the pointer to the Firestore client
 type Storage struct {
-	db *firestore.Client
+	DB  *firestore.Client
+	Ctx context.Context
 }
 
 // NewStorage returns the pointer to the Firstore client
 func NewStorage() (*Storage, error) {
 	// Use the application default credentials
-	storage := new(Storage)
-	ctx := context.Background()
+	s := new(Storage)
+	s.Ctx = context.Background()
 
-	client, e := firestore.NewClient(ctx, "fbstart")
+	client, e := firestore.NewClient(s.Ctx, "fbstart")
 	//	defer client.Close()
 	if e != nil {
 		log.Fatalln(e)
 	}
-	storage.db = client
-	return storage, e
+	s.DB = client
+	return s, e
 }
 
 // Create DODODO
-func (s *Storage) Create(c Contact) error {
+func (s *Storage) Create(c Contact) (e error) {
 	//TODO Implement the Create function
-	return nil
+	_, _, e = s.DB.Collection("contacts").Add(context.Background(), c)
+	if e != nil {
+		log.Fatalf("Failed adding %v: %v", c.FirstName, e)
+		return e
+	}
+	log.Println("added Ada")
+	return e
 }
 
 // Read DODODO
-func (s *Storage) Read(cid string) (c Contact, e error) {
+func (s *Storage) Read(cid string) (c *Contact, e error) {
 	c.FirstName = "Neil"
 	c.LastName = "Armstrong"
 	return c, nil
