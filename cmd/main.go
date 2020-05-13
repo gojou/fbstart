@@ -14,6 +14,10 @@ import (
 	"cloud.google.com/go/firestore"
 )
 
+// Establishing but NOT initializing the contacts Service
+// scope is package wide; will refactor.
+var cnt contacts.Service
+
 func main() {
 	log.Printf("Let's light this candle")
 
@@ -48,8 +52,21 @@ func initweb() (e error) {
 		log.Printf("Defaulting to port %s", port)
 	}
 	log.Printf("Listening on port %s", port)
+	// Initialize the previously added contacts server
+	cnt = contacts.NewService()
+	scout := contacts.Contact{ID: "zzzz"}
+	scout.FirstName = "Mark"
+	scout.LastName = "Poling"
+	scout.BirthYear = 1963
+	scout.BirthMonth = 11
+	scout.BirthDay = 29
+	scout.Email = "mark.poling@gmail.com"
 
-	scout := contacts.NewContact("PolingM", "Poling", "Mark", 1963, 11, 29, "mark@poling.com")
+	err := cnt.Create(scout)
+	if err != nil {
+		e = err
+		return
+	}
 
 	router := mux.NewRouter()
 	// THIS IS THE IMPORTANT LINE
@@ -101,42 +118,16 @@ func useDB(ctx context.Context, db firestore.Client) (e error) {
 		Born:   1912,
 	}
 	users := []User{ada, alan}
+
 	for _, u := range users {
 		_, _, err := db.Collection("users").Add(ctx, u)
-		// _, e = db.Collection("users").Doc(ada.First).Set(ctx, ada)
 		if err != nil {
 			log.Fatalf("Failed adding %v: %v", u.First, err)
 
 		}
+		log.Printf("Added %v\n", u.First)
 
 	}
 
-	// _, err := db.Collection("users").Doc("one").Set(ctx, ada)
-	// if err != nil {
-	// 	log.Fatalf("Failed adding alovelace: %v", err)
-	// 	return
-	// }
-	// log.Println("added Ada")
-
-	// _, _, e = db.Collection("users").Add(ctx, map[string]interface{}{
-	// 	"first": "Ada",
-	// 	"last":  "Lovelace",
-	// 	"born":  1815,
-	// })
-	// if e != nil {
-	// 	log.Fatalf("Failed adding alovelace: %v", e)
-	// 	return
-	// }
-	// log.Println("added Ada")
-
-	//	_, e = db.Collection("users").Doc(alan.First).Set(ctx, alan)
-	// _, _, e := db.Collection("users").Add(ctx, ada)
-	//
-	// log.Println("added Alan")
-	// if e != nil {
-	// 	log.Fatalf("Failed adding aturing: %v", e)
-	// 	return
-	// }
-	// return
 	return e
 }

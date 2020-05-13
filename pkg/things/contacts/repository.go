@@ -30,18 +30,18 @@ func NewStorage() (*Storage, error) {
 
 // Create DODODO
 func (s *Storage) Create(c Contact) (e error) {
-	//TODO Implement the Create function
+
 	_, _, e = s.DB.Collection("contacts").Add(context.Background(), c)
 	if e != nil {
-		log.Fatalf("Failed adding %v: %v", c.FirstName, e)
-		return e
+		log.Fatalf("Failed adding %v: %v", c.ID, e)
+		//return e
 	}
-	log.Println("added Ada")
+	log.Printf("Added Conact: %v", c.ID)
 	return e
 }
 
 // Read DODODO
-func (s *Storage) Read(cid string) (c *Contact, e error) {
+func (s *Storage) Read(cid string) (c Contact, e error) {
 	c.FirstName = "Neil"
 	c.LastName = "Armstrong"
 	return c, nil
