@@ -1,10 +1,6 @@
 package contacts
 
 import (
-	"fmt"
-	"net/http"
-	"strconv"
-
 	"cloud.google.com/go/firestore"
 )
 
@@ -39,7 +35,7 @@ func (s service) Read(cID string) (Contact, error) {
 	return s.r.Read(cID)
 }
 
-//NewContact returns a pointer to a new Contact
+//NewContact returns new Contact
 func (s service) NewContact(id string, last string,
 	first string, birthyear int, birthmonth int, birthday int,
 	email string) (Contact, error) {
@@ -54,18 +50,18 @@ func (s service) NewContact(id string, last string,
 	}, nil
 }
 
-// Server serves
-func (c Contact) Server(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-	fmt.Fprint(w, "<h1>"+c.Greeter()+"</h1>")
-}
-
-// Greeter is a sample method
-func (c Contact) Greeter() (greeting string) {
-	greeting = "My name is " + c.FirstName + " " + c.LastName
-	greeting = greeting + " " + c.ID
-	return
-}
+// // Server implements http.Handler
+// func (c Contact) Server(w http.ResponseWriter, r *http.Request) {
+// 	w.Header().Set("Content-Type", "text/html")
+// 	fmt.Fprint(w, "<h1>"+c.Greeter()+"</h1>")
+// }
+//
+// // Greeter is a sample method
+// func (c Contact) Greeter() (greeting string) {
+// 	greeting = "My name is " + c.FirstName + " " + c.LastName
+// 	greeting = greeting + " " + c.ID
+// 	return
+// }
 
 // GetAllContacts gets all Contact entities
 // TODO: make the return slice a slice of pointers to contacts
@@ -78,14 +74,4 @@ func GetAllContacts() []Contact {
 // TODO Pull in all the junk to make this work.
 func SaveContact(c Contact, store firestore.Client) (e error) {
 	return nil
-}
-
-// padInt utility function adds leading zeros to string representations of
-// months and days <10 characters long.
-func padInt(i int) string {
-	s := strconv.Itoa(i)
-	if len(s) < 2 {
-		s = "0" + s
-	}
-	return s
 }

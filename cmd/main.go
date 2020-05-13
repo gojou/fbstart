@@ -16,7 +16,7 @@ import (
 
 // Establishing but NOT initializing the contacts Service
 // scope is package wide; will refactor.
-var cnt contacts.Service
+var cnt = contacts.NewService()
 
 func main() {
 	log.Printf("Let's light this candle")
@@ -52,8 +52,6 @@ func initweb() (e error) {
 		log.Printf("Defaulting to port %s", port)
 	}
 	log.Printf("Listening on port %s", port)
-	// Initialize the previously added contacts server
-	cnt = contacts.NewService()
 	scout := contacts.Contact{ID: "zzzz"}
 	scout.FirstName = "Mark"
 	scout.LastName = "Poling"
