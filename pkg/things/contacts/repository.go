@@ -29,7 +29,7 @@ func NewStorage() (*Storage, error) {
 }
 
 // Create DODODO
-func (s *Storage) Create(c Contact) (e error) {
+func (s *Storage) Add(c Contact) (e error) {
 
 	_, _, e = s.DB.Collection("contacts").Add(context.Background(), c)
 	if e != nil {

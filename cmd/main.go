@@ -14,8 +14,6 @@ import (
 	"cloud.google.com/go/firestore"
 )
 
-// Establishing but NOT initializing the contacts Service
-// scope is package wide; will refactor.
 var cnt = contacts.NewService()
 
 func main() {
@@ -60,7 +58,7 @@ func initweb() (e error) {
 	c.BirthDay = 29
 	c.Email = "mark.poling@gmail.com"
 
-	err := cnt.Create(c)
+	err := cnt.Add(c)
 	if err != nil {
 		e = err
 		return

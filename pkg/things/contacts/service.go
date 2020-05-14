@@ -6,13 +6,13 @@ import (
 
 // Service returns the Client service
 type Service interface {
-	Create(Contact) error
+	Add(Contact) error
 	Read(string) (Contact, error)
 }
 
 // Repository interface defines the methods that can be used on the Service
 type Repository interface {
-	Create(Contact) error
+	Add(Contact) error
 	Read(string) (Contact, error)
 }
 
@@ -28,8 +28,8 @@ func NewService() Service {
 
 }
 
-func (s service) Create(c Contact) error {
-	return s.r.Create(c)
+func (s service) Add(c Contact) error {
+	return s.r.Add(c)
 }
 func (s service) Read(cID string) (Contact, error) {
 	return s.r.Read(cID)
@@ -49,19 +49,6 @@ func (s service) NewContact(id string, last string,
 		Email:      email,
 	}, nil
 }
-
-// // Server implements http.Handler
-// func (c Contact) Server(w http.ResponseWriter, r *http.Request) {
-// 	w.Header().Set("Content-Type", "text/html")
-// 	fmt.Fprint(w, "<h1>"+c.Greeter()+"</h1>")
-// }
-//
-// // Greeter is a sample method
-// func (c Contact) Greeter() (greeting string) {
-// 	greeting = "My name is " + c.FirstName + " " + c.LastName
-// 	greeting = greeting + " " + c.ID
-// 	return
-// }
 
 // GetAllContacts gets all Contact entities
 // TODO: make the return slice a slice of pointers to contacts
