@@ -52,15 +52,15 @@ func initweb() (e error) {
 		log.Printf("Defaulting to port %s", port)
 	}
 	log.Printf("Listening on port %s", port)
-	scout := contacts.Contact{ID: "zzzz"}
-	scout.FirstName = "Mark"
-	scout.LastName = "Poling"
-	scout.BirthYear = 1963
-	scout.BirthMonth = 11
-	scout.BirthDay = 29
-	scout.Email = "mark.poling@gmail.com"
+	c := contacts.Contact{ID: "zzzz"}
+	c.FirstName = "Mark"
+	c.LastName = "Poling"
+	c.BirthYear = 1963
+	c.BirthMonth = 11
+	c.BirthDay = 29
+	c.Email = "mark.poling@gmail.com"
 
-	err := cnt.Create(scout)
+	err := cnt.Create(c)
 	if err != nil {
 		e = err
 		return
@@ -68,7 +68,7 @@ func initweb() (e error) {
 
 	router := mux.NewRouter()
 	// THIS IS THE IMPORTANT LINE
-	router.HandleFunc("/", scout.Server)
+	router.HandleFunc("/", c.Server)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), router))
 
 	return nil
