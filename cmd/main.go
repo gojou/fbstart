@@ -72,7 +72,7 @@ func initweb() (e error) {
 		e = err
 		return
 	}
-
+	cnt.ListAll()
 	router := mux.NewRouter()
 	// THIS IS THE IMPORTANT LINE
 	router.HandleFunc("/", c.Server)

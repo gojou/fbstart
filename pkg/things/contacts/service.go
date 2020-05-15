@@ -6,14 +6,16 @@ import (
 
 // Service returns the Client service
 type Service interface {
-	NewContact() *Contact
 	Add(*Contact) error
+	ListAll() ([]Contact, error)
 	Read(string) (Contact, error)
+	NewContact() *Contact
 }
 
 // Repository interface defines the methods that can be used on the Service
 type Repository interface {
 	Add(*Contact) error
+	ListAll() ([]Contact, error)
 	Read(string) (Contact, error)
 }
 
@@ -32,6 +34,12 @@ func NewService() Service {
 func (s service) Add(c *Contact) error {
 	return s.r.Add(c)
 }
+
+func (s service) ListAll() ([]Contact, error) {
+	return s.r.ListAll()
+
+}
+
 func (s service) Read(cID string) (Contact, error) {
 	return s.r.Read(cID)
 }
