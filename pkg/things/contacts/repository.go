@@ -28,8 +28,8 @@ func NewStorage() (*Storage, error) {
 	return s, e
 }
 
-// Create DODODO
-func (s *Storage) Add(c Contact) (e error) {
+// Add DODODO
+func (s *Storage) Add(c *Contact) (e error) {
 
 	_, _, e = s.DB.Collection("contacts").Add(context.Background(), c)
 	if e != nil {

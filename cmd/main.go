@@ -50,7 +50,16 @@ func initweb() (e error) {
 		log.Printf("Defaulting to port %s", port)
 	}
 	log.Printf("Listening on port %s", port)
-	c := contacts.Contact{ID: "zzzz"}
+	// c := contacts.Contact{ID: "zzzz"}
+	// c.FirstName = "Mark"
+	// c.LastName = "Poling"
+	// c.BirthYear = 1963
+	// c.BirthMonth = 11
+	// c.BirthDay = 29
+	// c.Email = "mark.poling@gmail.com"
+
+	c := cnt.NewContact()
+	c.ID = "zzzz"
 	c.FirstName = "Mark"
 	c.LastName = "Poling"
 	c.BirthYear = 1963

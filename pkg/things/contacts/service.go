@@ -6,13 +6,14 @@ import (
 
 // Service returns the Client service
 type Service interface {
-	Add(Contact) error
+	NewContact() *Contact
+	Add(*Contact) error
 	Read(string) (Contact, error)
 }
 
 // Repository interface defines the methods that can be used on the Service
 type Repository interface {
-	Add(Contact) error
+	Add(*Contact) error
 	Read(string) (Contact, error)
 }
 
@@ -28,7 +29,7 @@ func NewService() Service {
 
 }
 
-func (s service) Add(c Contact) error {
+func (s service) Add(c *Contact) error {
 	return s.r.Add(c)
 }
 func (s service) Read(cID string) (Contact, error) {
@@ -36,18 +37,9 @@ func (s service) Read(cID string) (Contact, error) {
 }
 
 //NewContact returns new Contact
-func (s service) NewContact(id string, last string,
-	first string, birthyear int, birthmonth int, birthday int,
-	email string) (Contact, error) {
-	return Contact{
-		ID:         id,
-		LastName:   last,
-		FirstName:  first,
-		BirthYear:  birthyear,
-		BirthMonth: birthmonth,
-		BirthDay:   birthday,
-		Email:      email,
-	}, nil
+func (s service) NewContact() *Contact {
+	contact := new(Contact)
+	return contact
 }
 
 // GetAllContacts gets all Contact entities
