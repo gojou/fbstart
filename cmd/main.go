@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -10,8 +9,6 @@ import (
 	"github.com/gojou/fbstart/pkg/things/contacts"
 
 	"github.com/gorilla/mux"
-
-	"cloud.google.com/go/firestore"
 )
 
 var cnt = contacts.NewService()
@@ -25,14 +22,6 @@ func main() {
 }
 
 func run() (e error) {
-
-	// omitting explicit return value; e scoped in function return
-	// initialize storage, in this case firestore
-
-	e = initdb()
-	if e != nil {
-		return e
-	}
 
 	// initialize the web server
 	e = initweb()
@@ -50,89 +39,37 @@ func initweb() (e error) {
 		log.Printf("Defaulting to port %s", port)
 	}
 	log.Printf("Listening on port %s", port)
-	// c := contacts.Contact{ID: "zzzz"}
-	// c.FirstName = "Mark"
-	// c.LastName = "Poling"
-	// c.BirthYear = 1963
-	// c.BirthMonth = 11
-	// c.BirthDay = 29
-	// c.Email = "mark.poling@gmail.com"
 
 	c := cnt.NewContact()
-	c.ID = "zzzz"
+	c.ID = "bbbb"
 	c.FirstName = "Mark"
 	c.LastName = "Poling"
 	c.BirthYear = 1963
 	c.BirthMonth = 11
 	c.BirthDay = 29
-	c.Email = "mark.poling@gmail.com"
+	c.Email = "mark.poling@hvlst.com"
+	log.Printf("Just created %v ",c)
 
 	err := cnt.Add(c)
 	if err != nil {
 		e = err
 		return
 	}
-	cnt.ListAll()
+	cs,_:=cnt.ListAll()
+	cx:=cnt.NewContact()
+	cx=cs[0]
+	cx.ID="dddd"
+	cx.FirstName="rhi"
+	cx.BirthYear = 2007
+	cx.BirthMonth = 5
+	cx.BirthDay = 23
+	cx.Email = "rhi.poling@hvlst.com"
+	cnt.Add(cx)
+
 	router := mux.NewRouter()
 	// THIS IS THE IMPORTANT LINE
 	router.HandleFunc("/", c.Server)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), router))
 
 	return nil
-}
-
-func initdb() (e error) {
-	// Use the application default credentials
-
-	ctx := context.Background()
-
-	client, e := firestore.NewClient(ctx, "fbstart")
-	defer client.Close()
-	if e != nil {
-		log.Fatalln(e)
-		return e
-	}
-
-	e = useDB(ctx, *client)
-	if e != nil {
-		log.Fatalf("Failed: %v", e)
-		return e
-	}
-	return e // nil
-}
-
-func useDB(ctx context.Context, db firestore.Client) (e error) {
-
-	type User struct {
-		First  string `firestore:"first"`
-		Middle string `firestore:"middle"`
-		Last   string `firestore:"last"`
-		Born   int64  `firestore:"born"`
-	}
-	ada := User{
-		First:  "Ada",
-		Middle: "Rhiannon",
-		Last:   "Lovelace",
-		Born:   1815,
-	}
-
-	alan := User{
-		First:  "Alan",
-		Middle: "Mathis",
-		Last:   "Turing",
-		Born:   1912,
-	}
-	users := []User{ada, alan}
-
-	for _, u := range users {
-		_, _, err := db.Collection("users").Add(ctx, u)
-		if err != nil {
-			log.Fatalf("Failed adding %v: %v", u.First, err)
-
-		}
-		log.Printf("Added %v\n", u.First)
-
-	}
-
-	return e
 }

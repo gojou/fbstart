@@ -21,10 +21,10 @@ func NewStorage() (*Storage, error) {
 	s.Ctx = context.Background()
 
 	client, e := firestore.NewClient(s.Ctx, "fbstart")
-	//	defer client.Close()
 	if e != nil {
 		log.Fatalln(e)
 	}
+	// defer client.Close()
 	s.DB = client
 	return s, e
 }
@@ -42,27 +42,31 @@ func (s *Storage) Add(c *Contact) (e error) {
 }
 
 // ListAll returns all documents in a collection
-func (s Storage) ListAll() (cntcts []Contact, e error) {
+func (s Storage) ListAll() (cntcts []*Contact, e error) {
 	log.Printf("Getting all contacts")
-	iter := s.DB.Collection("contacts").Documents(context.Background())
+	iter := s.DB.Collection("contacts").Documents(s.Ctx)
 	for {
 		doc, err := iter.Next()
 		if err == iterator.Done {
-			break
+
+			return cntcts, nil
+
 		}
 		if err != nil {
 			log.Printf("Failed to iterate over contacts: %v", err)
 			e = err
 			return cntcts, e
 		}
-		log.Println(doc.Data())
+		c := new(Contact)
+		doc.DataTo(c)
+		cntcts = append(cntcts, c)
 
 	}
-	return cntcts, e
+	// return cntcts, e
 }
 
 // Read DODODO
-func (s *Storage) Read(cid string) (c Contact, e error) {
+func (s *Storage) Read(cid string) (c *Contact, e error) {
 	c.FirstName = "Neil"
 	c.LastName = "Armstrong"
 	return c, nil

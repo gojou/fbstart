@@ -7,16 +7,16 @@ import (
 // Service returns the Client service
 type Service interface {
 	Add(*Contact) error
-	ListAll() ([]Contact, error)
-	Read(string) (Contact, error)
+	ListAll() ([]*Contact, error)
+	Read(string) (*Contact, error)
 	NewContact() *Contact
 }
 
 // Repository interface defines the methods that can be used on the Service
 type Repository interface {
 	Add(*Contact) error
-	ListAll() ([]Contact, error)
-	Read(string) (Contact, error)
+	ListAll() ([]*Contact, error)
+	Read(string) (*Contact, error)
 }
 
 type service struct {
@@ -35,12 +35,12 @@ func (s service) Add(c *Contact) error {
 	return s.r.Add(c)
 }
 
-func (s service) ListAll() ([]Contact, error) {
+func (s service) ListAll() ([]*Contact, error) {
 	return s.r.ListAll()
 
 }
 
-func (s service) Read(cID string) (Contact, error) {
+func (s service) Read(cID string) (*Contact, error) {
 	return s.r.Read(cID)
 }
 
