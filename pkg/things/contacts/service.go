@@ -1,9 +1,5 @@
 package contacts
 
-import (
-	"cloud.google.com/go/firestore"
-)
-
 // Service returns the Client service
 type Service interface {
 	Add(*Contact) error
@@ -44,21 +40,8 @@ func (s service) Read(cID string) (*Contact, error) {
 	return s.r.Read(cID)
 }
 
-//NewContact returns new Contact
+//NewContact returns a pointer to a new Contact
 func (s service) NewContact() *Contact {
 	contact := new(Contact)
 	return contact
-}
-
-// GetAllContacts gets all Contact entities
-// TODO: make the return slice a slice of pointers to contacts
-func GetAllContacts() []Contact {
-
-	return nil
-}
-
-// SaveContact will save the contact created in the main func
-// TODO Pull in all the junk to make this work.
-func SaveContact(c Contact, store firestore.Client) (e error) {
-	return nil
 }

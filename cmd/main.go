@@ -60,11 +60,9 @@ func initweb() (e error) {
 	cx=cs[0]
 	cx.ID="dddd"
 	cx.FirstName="rhi"
-	cx.BirthYear = 2007
-	cx.BirthMonth = 5
-	cx.BirthDay = 23
 	cx.Email = "rhi.poling@hvlst.com"
 	cnt.Add(cx)
+	log.Printf("Just added %v ",cx)
 
 	router := mux.NewRouter()
 	// THIS IS THE IMPORTANT LINE
