@@ -42,7 +42,7 @@ func (s *Storage) Add(c *Contact) (e error) {
 }
 
 // ListAll returns all documents in a collection
-func (s Storage) ListAll() (cntcts []*Contact, e error) {
+func (s *Storage) ListAll() (cntcts []*Contact, e error) {
 	log.Printf("Getting all contacts")
 	iter := s.DB.Collection("contacts").Documents(s.Ctx)
 	for {
