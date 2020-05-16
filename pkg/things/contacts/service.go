@@ -42,6 +42,6 @@ func (s service) Read(cID string) (*Contact, error) {
 
 //NewContact returns a pointer to a new Contact
 func (s service) NewContact() *Contact {
-	contact := new(Contact)
+	contact := &Contact{}
 	return contact
 }

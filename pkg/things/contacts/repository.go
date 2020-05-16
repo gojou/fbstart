@@ -17,7 +17,7 @@ type Storage struct {
 // NewStorage returns the pointer to the Firstore client
 func NewStorage() (*Storage, error) {
 	// Use the application default credentials
-	s := new(Storage)
+	s := &Storage{}
 	s.Ctx = context.Background()
 
 	client, e := firestore.NewClient(s.Ctx, "fbstart")
