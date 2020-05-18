@@ -27,15 +27,18 @@ func NewService() Service {
 
 }
 
+// Add calls the Repository service to commit the contact to storage
 func (s service) Add(c *Contact) error {
 	return s.r.Add(c)
 }
 
+// ListAll calls on the Repository service to return an array of pointers to all contacts
 func (s service) ListAll() ([]*Contact, error) {
 	return s.r.ListAll()
 
 }
 
+// Read calls on the Repository service to return a contact by a string ID (NOT a contact DocRef)
 func (s service) Read(cID string) (*Contact, error) {
 	return s.r.Read(cID)
 }

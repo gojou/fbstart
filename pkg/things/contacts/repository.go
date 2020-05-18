@@ -29,7 +29,7 @@ func NewStorage() (*Storage, error) {
 	return s, e
 }
 
-// Add DODODO
+// Add commits the Contact to the repository
 func (s *Storage) Add(c *Contact) (e error) {
 
 	_, _, e = s.DB.Collection("contacts").Add(context.Background(), c)

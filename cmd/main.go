@@ -48,21 +48,21 @@ func initweb() (e error) {
 	c.BirthMonth = 11
 	c.BirthDay = 29
 	c.Email = "mark.poling@hvlst.com"
-	log.Printf("Just created %v ",c)
+	log.Printf("Just created %v ", c)
 
 	err := cnt.Add(c)
 	if err != nil {
 		e = err
 		return
 	}
-	cs,_:=cnt.ListAll()
-	cx:=cnt.NewContact()
-	cx=cs[0]
-	cx.ID="dddd"
-	cx.FirstName="rhi"
+	cs, _ := cnt.ListAll()
+	cx := cnt.NewContact()
+	cx = cs[0]
+	cx.ID = "dddd"
+	cx.FirstName = "rhi"
 	cx.Email = "rhi.poling@hvlst.com"
 	cnt.Add(cx)
-	log.Printf("Just added %v ",cx)
+	log.Printf("Just added %v ", cx)
 
 	router := mux.NewRouter()
 	// THIS IS THE IMPORTANT LINE
