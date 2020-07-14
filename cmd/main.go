@@ -21,10 +21,10 @@ func main() {
 	}
 }
 
-func run() (e error) {
+func run() error {
 
 	// initialize the web server
-	e = initweb()
+	e := initweb()
 	if e != nil {
 		return e
 	}
@@ -32,7 +32,7 @@ func run() (e error) {
 	return e
 }
 
-func initweb() (e error) {
+func initweb() error {
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
@@ -52,8 +52,8 @@ func initweb() (e error) {
 
 	err := cnt.Add(c)
 	if err != nil {
-		e = err
-		return
+		return err
+
 	}
 	cs, _ := cnt.ListAll()
 	cx := cnt.NewContact()
